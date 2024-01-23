@@ -1,0 +1,104 @@
+[gd_scene load_steps=10 format=3 uid="uid://cykf8owposdkc"]
+
+[ext_resource type="Script" path="res://scene.gd" id="1_rhjut"]
+[ext_resource type="VideoStream" path="res://assets/video.ogv" id="2_tujpw"]
+[ext_resource type="Script" path="res://addons/simple-free-look-camera-4-cf0bc21bfd15940b18ec42e3c6cae1ad385284c4/camera.gd" id="3_jvc3k"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_l72ub"]
+flip_faces = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bokqi"]
+top_radius = 0.1
+bottom_radius = 0.2
+height = 1.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0juhr"]
+size = Vector2(1.92, 1.08)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_go1br"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4qdan"]
+resource_local_to_scene = true
+emission_enabled = true
+emission_energy_multiplier = 5.0
+emission_texture = SubResource("ViewportTexture_go1br")
+
+[sub_resource type="Environment" id="Environment_2oved"]
+background_mode = 1
+background_energy_multiplier = 0.0
+
+[node name="Scene" type="Node3D"]
+script = ExtResource("1_rhjut")
+
+[node name="Room" type="MeshInstance3D" parent="."]
+transform = Transform3D(6, 0, 0, 0, 2, 0, 0, 0, 6, 0, 1, 0)
+mesh = SubResource("BoxMesh_l72ub")
+
+[node name="ProjectorStand" type="MeshInstance3D" parent="Room"]
+transform = Transform3D(0.166667, 0, 0, 0, 0.5, 0, 0, 0, 0.166667, 3.46941e-13, -0.25, 3.46941e-13)
+mesh = SubResource("CylinderMesh_bokqi")
+skeleton = NodePath("../..")
+
+[node name="Screen" type="MeshInstance3D" parent="Room"]
+transform = Transform3D(0.166667, 0, 0, 0, -2.18557e-08, -0.5, 0, 0.166667, -7.28523e-09, 3.46942e-13, 0, -0.491667)
+mesh = SubResource("PlaneMesh_0juhr")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_4qdan")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Room/Screen"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 2.08165e-12, 0.05, 0)
+light_energy = 10.0
+shadow_enabled = true
+shadow_normal_bias = 5.0
+spot_angle = 85.0
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="SubViewport/SubViewportContainer"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 2
+stream = ExtResource("2_tujpw")
+autoplay = true
+loop = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.950803, 0.309797, 0, -0.309797, 0.950803, 0, 1.4205, 1.7978)
+current = true
+script = ExtResource("3_jvc3k")
+sensitivity = 0.1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2oved")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.25
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+offset_right = 41.0
+offset_bottom = 177.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+
+[node name="FPSLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+
+[node name="TimerLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
