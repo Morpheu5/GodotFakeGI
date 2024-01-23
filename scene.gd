@@ -12,7 +12,7 @@ func _process(delta):
 	$CanvasLayer/MarginContainer/VBoxContainer/FPSLabel.text = "FPS: " + str(Engine.get_frames_per_second())
 	$CanvasLayer/MarginContainer/VBoxContainer/TimerLabel.text = "[t] timer trick" if timer_trick else "[t] _process"
 	if !timer_trick:
-		var video_player: VideoStreamPlayer  = $SubViewport/SubViewportContainer/VideoStreamPlayer
+		var video_player: VideoStreamPlayer  = $SubViewport_Low/SubViewportContainer/VideoStreamPlayer
 		var tex = video_player.get_video_texture()
 		var color = get_mean_color(tex)
 		var light: SpotLight3D = $Room/Screen/SpotLight3D
@@ -24,7 +24,7 @@ func _input(event):
 
 func _on_timer_timeout():
 	if timer_trick:
-		var video_player: VideoStreamPlayer  = $SubViewport/SubViewportContainer/VideoStreamPlayer
+		var video_player: VideoStreamPlayer  = $SubViewport_Low/SubViewportContainer/VideoStreamPlayer
 		var tex = video_player.get_video_texture()
 		var color = get_mean_color(tex)
 		var light: SpotLight3D = $Room/Screen/SpotLight3D

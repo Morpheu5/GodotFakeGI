@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://cykf8owposdkc"]
+[gd_scene load_steps=11 format=3 uid="uid://cykf8owposdkc"]
 
 [ext_resource type="Script" path="res://scene.gd" id="1_rhjut"]
 [ext_resource type="VideoStream" path="res://assets/video.ogv" id="2_tujpw"]
+[ext_resource type="VideoStream" path="res://assets/video_low.ogv" id="3_e3rcg"]
 [ext_resource type="Script" path="res://addons/simple-free-look-camera-4-cf0bc21bfd15940b18ec42e3c6cae1ad385284c4/camera.gd" id="3_jvc3k"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_l72ub"]
@@ -68,6 +69,21 @@ stream = ExtResource("2_tujpw")
 autoplay = true
 loop = true
 
+[node name="SubViewport_Low" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="SubViewport_Low"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="SubViewport_Low/SubViewportContainer"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 2
+stream = ExtResource("3_e3rcg")
+autoplay = true
+loop = true
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.950803, 0.309797, 0, -0.309797, 0.950803, 0, 1.4205, 1.7978)
 current = true
@@ -78,7 +94,7 @@ sensitivity = 0.1
 environment = SubResource("Environment_2oved")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.25
+wait_time = 0.05
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
